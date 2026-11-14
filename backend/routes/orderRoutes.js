@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { createOrder, myOrders, listOrders, updateOrderStatus, assignDelivery } from '../controllers/orderController.js';
+import { protect, allowRoles } from '../middleware/auth.js';
+const router = Router();
+router.use(protect);
+router.post('/', allowRoles('customer'), createOrder);
+router.get('/my', allowRoles('customer'), myOrders);
+router.get('/', allowRoles('admin', 'restaurant', 'delivery'), listOrders);
+router.patch('/:id/status', allowRoles('admin', 'restaurant', 'delivery'), updateOrderStatus);
+router.patch('/:id/assign-delivery', allowRoles('admin'), assignDelivery);
+export default router;
